@@ -124,10 +124,6 @@ fn exit_<lname>(&mut self, _ctx: &<lname; format="cap">Context\<'input>) { \}}; 
 
 }
 
-antlr_rust::coerce_from!{ 'input : <file.grammarName>Listener\<'input> }
-
-
-
 >>
 
 BaseListenerFile(file, header, namedActions) ::= <<>>
