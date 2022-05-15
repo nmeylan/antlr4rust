@@ -95,6 +95,17 @@ pub trait ParserRuleContext<'input>:
             .filter_map(|it| it.downcast_rc().ok())
             .collect()
     }
+    // todo, return iterator
+    fn children_of_given_type(&self, ttype: isize) -> Vec<Rc<TerminalNode<'input, Self::Ctx>>>
+    where
+        Self: Sized,
+    {
+        self.get_children()
+            // .filter(|it| it.deref().self_id() == T::id())
+            .filter_map(|it| it.downcast_rc::<TerminalNode<'input, Self::Ctx>>().ok())
+            .filter(|it| it.symbol.borrow().get_token_type() == ttype)
+            .collect()
+    }
 
     fn get_token(&self, ttype: isize, pos: usize) -> Option<Rc<TerminalNode<'input, Self::Ctx>>> {
         self.get_children()
