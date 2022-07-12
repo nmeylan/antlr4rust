@@ -1,6 +1,5 @@
 use std::hash::{Hash, Hasher};
-
-use murmur3::murmur3_32::MurmurHasher;
+use rustc_hash::FxHasher;
 
 use crate::int_stream::IntStream;
 use crate::lexer::Lexer;
@@ -22,7 +21,7 @@ impl LexerActionExecutor {
         //        let mut hasher = ;
         let cached_hash = lexer_actions
             .iter()
-            .fold(MurmurHasher::default(), |mut acc, x| {
+            .fold(FxHasher::default(), |mut acc, x| {
                 x.hash(&mut acc);
                 acc
             })

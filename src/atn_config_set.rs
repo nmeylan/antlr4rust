@@ -5,7 +5,7 @@ use std::hash::{Hash, Hasher};
 use std::ops::Deref;
 
 use bit_set::BitSet;
-use murmur3::murmur3_32::MurmurHasher;
+use rustc_hash::{FxHasher, FxHashMap};
 
 use crate::atn_config::ATNConfig;
 use crate::atn_simulator::IATNSimulator;
@@ -19,7 +19,7 @@ pub struct ATNConfigSet {
 
     //todo looks like we need only iteration for configs
     // so i think we can replace configs and lookup with indexhashset
-    config_lookup: HashMap<Key, usize, MurmurHasherBuilder>,
+    config_lookup: FxHashMap<Key, usize>,
 
     //todo remove box?
     pub(crate) configs: Vec<Box<ATNConfig>>,
@@ -93,7 +93,7 @@ impl ATNConfigSet {
     pub fn new_base_atnconfig_set(full_ctx: bool) -> ATNConfigSet {
         ATNConfigSet {
             cached_hash: 0,
-            config_lookup: HashMap::with_hasher(MurmurHasherBuilder {}),
+            config_lookup: FxHashMap::default(),
             configs: vec![],
             conflicting_alts: Default::default(),
             dips_into_outer_context: false,
@@ -116,7 +116,7 @@ impl ATNConfigSet {
     fn full_hash_key(config: &ATNConfig) -> Key { Key::Full(config.clone()) }
 
     fn local_hash_key(config: &ATNConfig) -> Key {
-        let mut hasher = MurmurHasher::default();
+        let mut hasher = FxHasher::default();
         config.get_state().hash(&mut hasher);
         config.get_alt().hash(&mut hasher);
         config.semantic_context.hash(&mut hasher);

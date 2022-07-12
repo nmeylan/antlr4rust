@@ -1,7 +1,6 @@
 use std::fmt::{Display, Error, Formatter};
 use std::hash::{Hash, Hasher};
-
-use murmur3::murmur3_32::MurmurHasher;
+use rustc_hash::FxHasher;
 
 use crate::atn_config_set::ATNConfigSet;
 use crate::lexer_action_executor::LexerActionExecutor;
@@ -49,7 +48,7 @@ impl Hash for DFAState {
 
 impl DFAState {
     pub fn default_hash(&self) -> u64 {
-        let mut hasher = MurmurHasher::default();
+        let mut hasher = FxHasher::default();
         self.hash(&mut hasher);
         hasher.finish()
     }

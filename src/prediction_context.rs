@@ -5,8 +5,7 @@ use std::hash::{BuildHasher, Hash, Hasher};
 use std::ops::Deref;
 
 use std::sync::{Arc, RwLock};
-
-use murmur3::murmur3_32::MurmurHasher;
+use rustc_hash::FxHasher;
 
 use crate::atn::ATN;
 use crate::dfa::ScopeExt;
@@ -180,7 +179,7 @@ impl PredictionContext {
     }
 
     pub fn calc_hash(&mut self) {
-        let mut hasher = MurmurHasher::default();
+        let mut hasher = FxHasher::default();
         match self {
             PredictionContext::Singleton(SingletonPredictionContext {
                 parent_ctx,
@@ -570,9 +569,9 @@ pub struct PredictionContextCache {
 pub struct MurmurHasherBuilder {}
 
 impl BuildHasher for MurmurHasherBuilder {
-    type Hasher = MurmurHasher;
+    type Hasher = FxHasher;
 
-    fn build_hasher(&self) -> Self::Hasher { MurmurHasher::default() }
+    fn build_hasher(&self) -> Self::Hasher { FxHasher::default() }
 }
 
 impl PredictionContextCache {
