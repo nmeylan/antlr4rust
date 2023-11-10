@@ -301,7 +301,8 @@ where
         offending_token: Option<isize>,
         err: Option<&ANTLRError>,
     ) {
-        self._syntax_errors.update(|it| it + 1);
+        let mut syntax_error = self._syntax_errors.as_ptr();
+        unsafe { *syntax_error = *syntax_error + 1; }
         let offending_token: Option<&_> = match offending_token {
             None => Some(self.get_current_token().borrow()),
             Some(x) => Some(self.input.get(x).borrow()),

@@ -114,10 +114,12 @@ impl ILexerATNSimulator for LexerATNSimulator {
     fn consume<T: IntStream + ?Sized>(&self, _input: &mut T) {
         let ch = _input.la(1);
         if ch == '\n' as isize {
-            self.current_pos.line.update(|x| x + 1);
+            let mut line = self.current_pos.line.as_ptr();
+            unsafe { *line = *line + 1; }
             self.current_pos.char_position_in_line.set(0);
         } else {
-            self.current_pos.char_position_in_line.update(|x| x + 1);
+            let mut char_pos = self.current_pos.char_position_in_line.as_ptr();
+            unsafe { *char_pos = *char_pos + 1; }
         }
         _input.consume();
     }

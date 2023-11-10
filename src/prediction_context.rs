@@ -384,7 +384,7 @@ impl PredictionContext {
                     parents,
                     return_states: vec![a.return_state, b.return_state],
                 };
-                if !result.return_states.is_sorted() {
+                if !Self::is_sorted(&result.return_states) {
                     result.parents.swap(0, 1);
                     result.return_states.swap(0, 1);
                 }
@@ -392,6 +392,9 @@ impl PredictionContext {
             }
             .alloc()
         })
+    }
+    fn is_sorted<T: Ord>(slice: &[T]) -> bool {
+        slice.windows(2).all(|w| w[0] <= w[1])
     }
 
     fn merge_root(

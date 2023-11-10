@@ -1,8 +1,6 @@
 #![crate_type = "lib"]
 #![feature(try_blocks)]
 //#![feature(nll)]
-#![feature(is_sorted)]
-#![feature(cell_update)]
 #![feature(specialization)]
 #![feature(coerce_unsized)]
 #![feature(associated_type_defaults)]
